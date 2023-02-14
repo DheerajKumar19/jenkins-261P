@@ -112,4 +112,51 @@ public class CreateJobCommandTest {
             }
         }
     }
+
+    @Test public void cannotCreateDuplicateJob() {
+        CLICommand cmd = new CreateJobCommand();
+        CLICommandInvoker invoker = new CLICommandInvoker(r, cmd);
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(0));
+
+        assertThat(invoker.withStdin(new ByteArrayInputStream("<project/>".getBytes(StandardCharsets.UTF_8))).invokeWithArgs("job1"), succeededSilently());
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(1));
+
+        CLICommandInvoker.Result result = invoker.withStdin(new ByteArrayInputStream("<project/>".getBytes(StandardCharsets.UTF_8))).invokeWithArgs("job1");
+        assertThat(result.stderr(), containsString("already exists"));
+        assertThat(result, failedWith(4));
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(1));
+    }
+
+    @Test public void cannotCreateJobInUnknownItemGroup() {
+        CLICommand cmd = new CreateJobCommand();
+        CLICommandInvoker invoker = new CLICommandInvoker(r, cmd);
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(0));
+
+        CLICommandInvoker.Result result = invoker.withStdin(new ByteArrayInputStream("<project/>".getBytes(StandardCharsets.UTF_8))).invokeWithArgs("job1/");
+        assertThat(result.stderr(), containsString("Unknown ItemGroup"));
+        assertThat(result, failedWith(3));
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(0));
+    }
+
+    @Test public void cannotCreateJobWithEmptyName() {
+        CLICommand cmd = new CreateJobCommand();
+        CLICommandInvoker invoker = new CLICommandInvoker(r, cmd);
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(0));
+
+        CLICommandInvoker.Result result = invoker.withStdin(new ByteArrayInputStream("<project/>".getBytes(StandardCharsets.UTF_8))).invokeWithArgs("");
+        assertThat(result.stderr(), containsString(hudson.model.Messages.Hudson_NoName()));
+        assertThat(result, failedWith(1));
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(0));
+    }
+
+    @Test public void cannotCreateJobWithUnsafeCharInName() {
+        CLICommand cmd = new CreateJobCommand();
+        CLICommandInvoker invoker = new CLICommandInvoker(r, cmd);
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(0));
+
+        CLICommandInvoker.Result result = invoker.withStdin(new ByteArrayInputStream("<project/>".getBytes(StandardCharsets.UTF_8))).invokeWithArgs("job$1");
+        assertThat(result.stderr(), containsString(hudson.model.Messages.Hudson_UnsafeChar('$')));
+        assertThat(result, failedWith(1));
+        assertThat(r.jenkins.getItems(), Matchers.hasSize(0));
+    }
 }
