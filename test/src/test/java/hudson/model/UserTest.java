@@ -204,6 +204,43 @@ public class UserTest {
     }
 
     @Test
+    public void testGetUserInvalidName() throws Exception {
+        {
+            User user = User.get("%xJU",false,Collections.emptyMap());
+            assertNull("User %xJU should not be created.", user);
+        }
+        j.jenkins.reload();
+        {
+            User user2 = User.get("John Smith");
+            user2.setFullName("Alice Smith");
+            assertEquals("Users should have same id even after editing the name", "John Smith", user2.getId());
+            User user4 = User.get("Marie", false, Collections.EMPTY_MAP);
+            assertNull("User should not be created because Marie does not exists.", user4);
+        }
+    }
+
+    @Test
+    public void testGetAndGetAllForEmail() {
+        {
+            User user = User.get("john.smith@test.org", false, Collections.emptyMap());
+            assertNull("User john.smith@test.org should not be created.", user);
+            assertFalse("Jenkins should not contain user john.smith@test.org.", User.getAll().contains(user));
+        }
+        {
+            User user2 = User.get("john.rambo.smith@test.org", true, Collections.emptyMap());
+            assertNotNull("User with email john.rambo.smith@test.org should be created.", user2);
+            assertTrue("Jenkins should contain user john.rambo.smith@test.org", User.getAll().contains(user2));
+        }
+        {
+            // checking if it can get the existing user
+            User user = User.get("john.rambo.smith@test.org", false, Collections.emptyMap());
+            assertNotNull("User with email john.rambo.smith@test.org should be created.", user);
+            assertTrue("Jenkins should contain user john.rambo.smith@test.org", User.getAll().contains(user));
+        }
+
+    }
+
+    @Test
     public void caseInsensitivity() {
         j.jenkins.setSecurityRealm(new IdStrategySpecifyingSecurityRealm(new IdStrategy.CaseInsensitive()));
         User user = User.get("john smith");
