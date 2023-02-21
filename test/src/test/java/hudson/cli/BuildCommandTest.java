@@ -143,9 +143,26 @@ public class BuildCommandTest {
         FreeStyleProject p = j.createFreeStyleProject();
         p.addProperty(new ParametersDefinitionProperty(new StringParameterDefinition("key", null)));
 
-        assertThat(new CLICommandInvoker(j, new BuildCommand()).invokeWithArgs("-s", "-p", "key=foobar", p.getName()), CLICommandInvoker.Matcher.succeeded());
+        assertThat(new CLICommandInvoker(j, new BuildCommand()).invokeWithArgs("-s", "-c", "-p", "key=foobar", p.getName()), CLICommandInvoker.Matcher.succeeded());
         FreeStyleBuild b = j.assertBuildStatusSuccess(p.getBuildByNumber(1));
         assertEquals("foobar", b.getAction(ParametersAction.class).getParameter("key").getValue());
+    }
+
+    @Test
+    public void parameters1() throws Exception {
+        FreeStyleProject p = j.createFreeStyleProject();
+        p.addProperty(new ParametersDefinitionProperty(new StringParameterDefinition("key", null)));
+
+        assertThat(new CLICommandInvoker(j, new BuildCommand()).invokeWithArgs("-s", "-c", "-p", "key=foobar", p.getName()), CLICommandInvoker.Matcher.succeeded());
+        FreeStyleBuild b = j.assertBuildStatusSuccess(p.getBuildByNumber(1));
+        assertEquals("foobar", b.getAction(ParametersAction.class).getParameter("key").getValue());
+    }
+
+    @Test
+    public void parametersEmptyPDPTest() throws Exception {
+        FreeStyleProject p = j.createFreeStyleProject();
+
+        assertThat(new CLICommandInvoker(j, new BuildCommand()).invokeWithArgs("-s", "-p", "key=foobar", p.getName()), CLICommandInvoker.Matcher.failedWith(4));
     }
 
     @Test

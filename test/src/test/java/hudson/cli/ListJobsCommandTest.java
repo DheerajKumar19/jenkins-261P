@@ -75,6 +75,25 @@ public class ListJobsCommandTest {
         assertThat(result.stdout(), not(containsString("nestedJob")));
     }
 
+    @Test public void getAllJobsWithoutViewName() throws Exception {
+        MockFolder folder = j.createFolder("Folder");
+        MockFolder nestedFolder = folder.createProject(MockFolder.class, "NestedFolder");
+        FreeStyleProject job = folder.createProject(FreeStyleProject.class, "job");
+        FreeStyleProject nestedJob = nestedFolder.createProject(FreeStyleProject.class, "nestedJob");
+
+        ListView view = new ListView("OuterFolder");
+        view.setRecurse(true);
+        j.jenkins.addView(view);
+
+        ((DirectlyModifiableView) j.jenkins.getView("OuterFolder")).add(folder);
+        ((DirectlyModifiableView) j.jenkins.getView("OuterFolder")).add(job);
+
+        // use invoke as opposed to invokeWithArgs to test ListJobsCommand with no view name.
+        CLICommandInvoker.Result result = command.invoke();
+        assertThat(result, CLICommandInvoker.Matcher.succeeded());
+        assertThat(result.stdout(), containsString("Folder"));
+    }
+
     @Issue("JENKINS-48220")
     @Test public void getAllJobsFromFolder() throws Exception {
         MockFolder folder = j.createFolder("Folder");
