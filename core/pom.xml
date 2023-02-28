@@ -212,6 +212,11 @@ THE SOFTWARE.
       <artifactId>commons-lang</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>caffeine-api</artifactId>
+      <version>2.9.3-65.v6a_47d0f4d1fe</version>
+    </dependency>
+    <dependency>
       <groupId>io.jenkins.stapler</groupId>
       <artifactId>jenkins-stapler-support</artifactId>
     </dependency>
@@ -290,6 +295,11 @@ THE SOFTWARE.
       <artifactId>jbcrypt</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>ecj</artifactId>
+      <version>3.26.0</version>
+    </dependency>
+    <dependency>
       <!-- Groovy shell uses this, but it doesn't declare the dependency -->
       <groupId>org.fusesource.jansi</groupId>
       <artifactId>jansi</artifactId>
@@ -332,6 +342,11 @@ THE SOFTWARE.
           <artifactId>javax.servlet-api</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>junit</artifactId>
+      <version>1166.va_436e268e972</version>
     </dependency>
     <dependency>
       <groupId>org.jfree</groupId>
@@ -527,21 +542,6 @@ THE SOFTWARE.
       <artifactId>xmlunit-matchers</artifactId>
       <version>${xmlunit.version}</version>
       <scope>test</scope>
-    </dependency>
-      <dependency>
-          <groupId>org.eclipse.jdt</groupId>
-          <artifactId>ecj</artifactId>
-          <version>3.26.0</version>
-      </dependency>
-    <dependency>
-      <groupId>io.jenkins.plugins</groupId>
-      <artifactId>caffeine-api</artifactId>
-      <version>2.9.3-65.v6a_47d0f4d1fe</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins</groupId>
-      <artifactId>junit</artifactId>
-      <version>1166.va_436e268e972</version>
     </dependency>
   </dependencies>
 

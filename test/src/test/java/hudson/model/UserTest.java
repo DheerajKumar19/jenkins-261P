@@ -206,7 +206,7 @@ public class UserTest {
     @Test
     public void testGetUserInvalidName() throws Exception {
         {
-            User user = User.get("%xJU",false,Collections.emptyMap());
+            User user = User.get("%xJU", false, Collections.emptyMap());
             assertNull("User %xJU should not be created.", user);
         }
         j.jenkins.reload();

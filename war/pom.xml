@@ -401,13 +401,13 @@ THE SOFTWARE.
                   <type>hpi</type>
                 </artifactItem>
 
-<!--                <artifactItem>-->
-<!--                  &lt;!&ndash; dependency of script-security and workflow-support &ndash;&gt;-->
-<!--                  <groupId>io.jenkins.plugins</groupId>-->
-<!--                  <artifactId>caffeine-api</artifactId>-->
-<!--                  <version>2.9.3-65.v6a_47d0f4d1fe</version>-->
-<!--                  <type>hpi</type>-->
-<!--                </artifactItem>-->
+                <!--                <artifactItem>-->
+                <!--                  &lt;!&ndash; dependency of script-security and workflow-support &ndash;&gt;-->
+                <!--                  <groupId>io.jenkins.plugins</groupId>-->
+                <!--                  <artifactId>caffeine-api</artifactId>-->
+                <!--                  <version>2.9.3-65.v6a_47d0f4d1fe</version>-->
+                <!--                  <type>hpi</type>-->
+                <!--                </artifactItem>-->
 
                 <artifactItem>
                   <!-- dependency of echarts-api -->
