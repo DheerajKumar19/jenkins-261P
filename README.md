@@ -73,5 +73,3 @@ See [adopters](https://www.jenkins.io/project/adopters/) for the list of Jenkins
 # License
 
 Jenkins is **licensed** under the **[MIT License](https://github.com/jenkinsci/jenkins/blob/master/LICENSE.txt)**.
-
-#test
