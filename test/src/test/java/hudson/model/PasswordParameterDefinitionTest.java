@@ -25,18 +25,23 @@
 package hudson.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import hudson.Launcher;
 import java.io.IOException;
 import jenkins.model.Jenkins;
+import net.sf.json.JSONObject;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.Issue;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockAuthorizationStrategy;
 import org.jvnet.hudson.test.TestBuilder;
+import org.kohsuke.stapler.StaplerRequest;
 
 public class PasswordParameterDefinitionTest {
 
@@ -105,6 +110,28 @@ public class PasswordParameterDefinitionTest {
         FreeStyleBuild b4 = p.getLastBuild();
         assertEquals(4, b4.getNumber());
         j.assertLogContains("I heard about a !", j.assertBuildStatusSuccess(b4));
+    }
+
+    @Test
+    public void testCreateValue()  {
+        // mock the StaplerRequest and JSONObject
+        StaplerRequest req = mock(StaplerRequest.class);
+        JSONObject jo = mock(JSONObject.class);
+
+        // create a PasswordParameterValue object
+        PasswordParameterValue expectedValue = new PasswordParameterValue("name", "default_value");
+        expectedValue.setDescription("description");
+
+        // mock the req.bindJSON() method to return the expected PasswordParameterValue object
+        when(req.bindJSON(eq(PasswordParameterValue.class), eq(jo))).thenReturn(expectedValue);
+
+        // create an instance of the class that contains the createValue() method
+
+
+        PasswordParameterValue actualValue = new PasswordParameterDefinition("name", "default_value", "description").createValue(req, jo);
+
+        // assert that the returned object is equal to the expected object
+        assertEquals(expectedValue, actualValue);
     }
 
 }
