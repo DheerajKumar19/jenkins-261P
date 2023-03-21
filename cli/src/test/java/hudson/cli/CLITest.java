@@ -23,7 +23,6 @@ public class CLITest {
         InputStream mockInputStream = mock(InputStream.class);
 
         // Configure mock objects
-        mockFactory.authorization= "nppatil";
         when(mockFactory.authorization("nppatil")).thenReturn(mock(CLIConnectionFactory.class));
         when(mockStreams.getOutputStream()).thenReturn(mock(OutputStream.class));
         when(mockStreams.getInputStream()).thenReturn(mockInputStream);
@@ -32,15 +31,16 @@ public class CLITest {
 
         // Create test object
         HttpConnectionManager connectionManager = new HttpConnectionManager(mockFactory);
-        when(HttpConnectionManager.createStream("https://jenkins.io/")).thenReturn(mockStreams);
+
         // Call method under test
-        int result = connectionManager.plainHttpConnection("https://jenkins.io/", Arrays.asList("help"));
+        int result = connectionManager.plainHttpConnection("http://localhost:8888/", Arrays.asList("help"));
 
 //        // Verify results
         assertEquals(0, result);
+        verify(mockFactory).authorization("nppatil");
         verify(mockStreams).getOutputStream();
         verify(mockStreams).getInputStream();
-        verify(mockConnection).start(Arrays.asList("help"));
+        verify(mockConnection).start(Arrays.asList("arg1", "arg2"));
         verify(mockConnection).sendEncoding(anyString());
         verify(mockConnection).exit();
         verify(mockInputStream).read();
